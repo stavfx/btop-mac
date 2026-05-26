@@ -43,8 +43,10 @@ since a bare `swiftc` on `PATH` may be too old for SwiftTerm.
 open dist/btop.app
 ```
 
-A ~1000x640 window titled "btop" opens running btop. Press **q** inside btop to
-quit; the app then terminates. Closing the window also terminates the app.
+A ~1000x640 window titled "btop" opens running btop. Quit with **q** (btop's own
+key), **⌘Q**, or by closing the window (**⌘W**) — each terminates the app. As a
+regular app, relaunching it just refocuses the existing window instead of opening
+a second one.
 
 ## Install
 
