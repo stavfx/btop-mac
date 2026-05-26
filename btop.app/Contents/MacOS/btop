@@ -1,0 +1,44 @@
+#!/bin/bash
+# Standalone launcher: runs btop inside iTerm.
+# If a btop window is already open, focus it instead of opening another
+# (mirrors the scrcpy Alfred workflow's focus-or-launch behavior).
+
+BTOP="/opt/homebrew/bin/btop"
+
+# Find the tty (e.g. ttys003) of a running btop process, if any.
+btop_tty=""
+btop_pid=$(pgrep -x btop | head -1)
+if [[ -n "$btop_pid" ]]; then
+  btop_tty=$(ps -o tty= -p "$btop_pid" | tr -d ' ')
+fi
+
+if [[ -n "$btop_tty" ]]; then
+  # btop is already running — bring its iTerm window to the front.
+  osascript <<EOF
+tell application "iTerm"
+  activate
+  repeat with w in windows
+    repeat with t in tabs of w
+      repeat with s in sessions of t
+        if tty of s is "/dev/$btop_tty" then
+          select w
+          select t
+          select s
+          return
+        end if
+      end repeat
+    end repeat
+  end repeat
+end tell
+EOF
+else
+  # Not running — open a new iTerm window and exec btop in it.
+  # `exec` replaces the shell so the window closes when you quit btop.
+  osascript <<EOF
+tell application "iTerm"
+  activate
+  set w to (create window with default profile)
+  tell current session of w to write text "exec $BTOP"
+end tell
+EOF
+fi
