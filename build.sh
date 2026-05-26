@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build the native "btop" macOS app and assemble it into native/dist/btop.app.
+# Build the native "btop" macOS app and assemble it into dist/btop.app.
 set -euo pipefail
 
 # Resolve paths relative to this script so it works from any CWD.
@@ -24,9 +24,10 @@ fi
 APP="$SCRIPT_DIR/dist/btop.app"
 echo "==> Assembling $APP"
 rm -rf "$APP"
-mkdir -p "$APP/Contents/MacOS"
+mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN" "$APP/Contents/MacOS/btop"
 cp "$SCRIPT_DIR/Info.plist" "$APP/Contents/Info.plist"
+cp "$SCRIPT_DIR/icon/btop.icns" "$APP/Contents/Resources/btop.icns"
 
 echo "==> Ad-hoc codesign"
 codesign --force --deep --sign - "$APP"

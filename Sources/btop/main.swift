@@ -9,6 +9,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, LocalProcessTerminalVi
     var terminal: LocalProcessTerminalView!
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        installMainMenu()
+
         let frame = NSRect(x: 0, y: 0, width: 1000, height: 640)
 
         terminal = LocalProcessTerminalView(frame: frame)
@@ -40,6 +42,30 @@ final class AppDelegate: NSObject, NSApplicationDelegate, LocalProcessTerminalVi
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         return true
+    }
+
+    // A minimal menu so standard shortcuts (⌘Q quit, ⌘W close) work. Without it
+    // ⌘Q has no target and the keystroke leaks into the terminal / btop.
+    private func installMainMenu() {
+        let mainMenu = NSMenu()
+
+        let appItem = NSMenuItem()
+        mainMenu.addItem(appItem)
+        let appMenu = NSMenu()
+        appItem.submenu = appMenu
+        appMenu.addItem(withTitle: "Quit btop",
+                        action: #selector(NSApplication.terminate(_:)),
+                        keyEquivalent: "q")
+
+        let windowItem = NSMenuItem()
+        mainMenu.addItem(windowItem)
+        let windowMenu = NSMenu(title: "Window")
+        windowItem.submenu = windowMenu
+        windowMenu.addItem(withTitle: "Close",
+                           action: #selector(NSWindow.performClose(_:)),
+                           keyEquivalent: "w")
+
+        NSApp.mainMenu = mainMenu
     }
 
     // MARK: - LocalProcessTerminalViewDelegate

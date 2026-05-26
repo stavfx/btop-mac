@@ -15,6 +15,16 @@ Sources/btop/main.swift  AppKit app + LocalProcessTerminalView
 Info.plist               App bundle metadata
 build.sh                 Build + assemble dist/btop.app + ad-hoc codesign
 install.sh               Copy to ~/Applications/btop.app + lsregister
+icon/                    Icon generator (make-icon.swift/.sh) + btop.icns
+```
+
+## Icon
+
+`icon/btop.icns` is committed and bundled by `build.sh`. To change the design,
+edit `icon/make-icon.swift` and regenerate:
+
+```sh
+./icon/make-icon.sh
 ```
 
 ## Build

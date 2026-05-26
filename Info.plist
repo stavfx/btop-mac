@@ -10,6 +10,8 @@
     <string>local.native.btop</string>
     <key>CFBundleExecutable</key>
     <string>btop</string>
+    <key>CFBundleIconFile</key>
+    <string>btop</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleInfoDictionaryVersion</key>
