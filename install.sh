@@ -1,22 +1,21 @@
-#!/bin/bash
-# Install the btop launcher app so Spotlight / Alfred / Finder can find it.
-# Symlinks the bundle into ~/Applications and registers it with Launch
-# Services. Using a symlink means edits in this repo take effect immediately.
+#!/usr/bin/env bash
+# Install the native btop app into ~/Applications and register it with LaunchServices.
 set -euo pipefail
 
-REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SRC="$REPO_DIR/btop.app"
-DEST_DIR="$HOME/Applications"
-DEST="$DEST_DIR/btop.app"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SRC="$SCRIPT_DIR/dist/btop.app"
+DEST="$HOME/Applications/btop.app"
+
+if [[ ! -d "$SRC" ]]; then
+    echo "ERROR: $SRC not found. Run ./build.sh first." >&2
+    exit 1
+fi
+
+mkdir -p "$HOME/Applications"
+rm -rf "$DEST"
+cp -R "$SRC" "$DEST"
+
 LSREGISTER="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister"
+"$LSREGISTER" -f "$DEST"
 
-chmod +x "$SRC/Contents/MacOS/btop"
-
-mkdir -p "$DEST_DIR"
-rm -f "$DEST"
-ln -s "$SRC" "$DEST"
-echo "Linked $DEST -> $SRC"
-
-"$LSREGISTER" -f "$SRC"
-echo "Registered with Launch Services."
-echo "Done. Launch 'btop' from Spotlight, Alfred, or Finder."
+echo "==> Installed: $DEST"
