@@ -7,7 +7,7 @@
     <key>CFBundleDisplayName</key>
     <string>btop</string>
     <key>CFBundleIdentifier</key>
-    <string>local.native.btop</string>
+    <string>com.stavfx.btop</string>
     <key>CFBundleExecutable</key>
     <string>btop</string>
     <key>CFBundleIconFile</key>
