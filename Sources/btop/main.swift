@@ -118,6 +118,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, LocalProcessTerminalVi
         mainMenu.addItem(appItem)
         let appMenu = NSMenu()
         appItem.submenu = appMenu
+        appMenu.addItem(withTitle: "About btop",
+                        action: #selector(showAboutPanel(_:)),
+                        keyEquivalent: "")
+        appMenu.addItem(NSMenuItem.separator())
         appMenu.addItem(withTitle: "Quit btop",
                         action: #selector(NSApplication.terminate(_:)),
                         keyEquivalent: "q")
@@ -131,6 +135,24 @@ final class AppDelegate: NSObject, NSApplicationDelegate, LocalProcessTerminalVi
                            keyEquivalent: "w")
 
         NSApp.mainMenu = mainMenu
+    }
+
+    @objc private func showAboutPanel(_ sender: Any?) {
+        let font = NSFont.systemFont(ofSize: 11)
+        let textAttrs: [NSAttributedString.Key: Any] = [
+            .font: font,
+            .foregroundColor: NSColor.labelColor,
+        ]
+        func link(_ text: String, _ url: String) -> NSAttributedString {
+            NSAttributedString(string: text, attributes: [.font: font, .link: URL(string: url)!])
+        }
+        let credits = NSMutableAttributedString()
+        credits.append(NSAttributedString(string: "\nA native macOS window for btop\n", attributes: textAttrs))
+        credits.append(link("github.com/stavfx/btop-mac", "https://github.com/stavfx/btop-mac"))
+        credits.append(NSAttributedString(string: "\n\nbtop CLI by Aristocratos\n", attributes: textAttrs))
+        credits.append(link("github.com/aristocratos/btop", "https://github.com/aristocratos/btop"))
+        NSApp.activate(ignoringOtherApps: true)
+        NSApp.orderFrontStandardAboutPanel(options: [.credits: credits])
     }
 
     // MARK: - LocalProcessTerminalViewDelegate
